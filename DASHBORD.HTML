@@ -1,0 +1,1058 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;html lang="en" dir="ltr"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1">&lt;title&gt;Crypto AI Trading Agent&lt;/title&gt;</p>
+<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg: #050810;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--surface: #0b1120;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--surface2: #0f1929;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--border: #162035;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent: #00d4ff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent2: #00ff88;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--sell: #ff3b5c;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--buy: #00e676;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--wait: #ffb300;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--text: #ddeeff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--muted: #4a6a8a;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--font: 'Syne', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--mono: 'JetBrains Mono', monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1">- { margin: 0; padding: 0; box-sizing: border-box; }</p>
+<p class="p2"><br></p>
+<p class="p1">body {</p>
+<p class="p1">background: var(–bg);</p>
+<p class="p1">color: var(–text);</p>
+<p class="p1">font-family: var(–font);</p>
+<p class="p1">min-height: 100vh;</p>
+<p class="p1">overflow-x: hidden;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">body::before {</p>
+<p class="p1">content: ‘’;</p>
+<p class="p1">position: fixed;</p>
+<p class="p1">inset: 0;</p>
+<p class="p1">background-image:</p>
+<p class="p1">linear-gradient(rgba(0,212,255,0.025) 1px, transparent 1px),</p>
+<p class="p1">linear-gradient(90deg, rgba(0,212,255,0.025) 1px, transparent 1px);</p>
+<p class="p1">background-size: 44px 44px;</p>
+<p class="p1">pointer-events: none;</p>
+<p class="p1">z-index: 0;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">@keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:.9} }</p>
+<p class="p1">@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }</p>
+<p class="p1">@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }</p>
+<p class="p1">@keyframes spin { to{transform:rotate(360deg)} }</p>
+<p class="p1">@keyframes scanline {</p>
+<p class="p1">0% { transform: translateY(-100%); }</p>
+<p class="p1">100% { transform: translateY(100vh); }</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Scanline effect */</p>
+<p class="p1">.scanline {</p>
+<p class="p1">position: fixed;</p>
+<p class="p1">top: 0; left: 0; right: 0;</p>
+<p class="p1">height: 2px;</p>
+<p class="p1">background: linear-gradient(90deg, transparent, rgba(0,212,255,0.08), transparent);</p>
+<p class="p1">animation: scanline 6s linear infinite;</p>
+<p class="p1">pointer-events: none;</p>
+<p class="p1">z-index: 9999;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.glow-orb {</p>
+<p class="p1">position: fixed;</p>
+<p class="p1">border-radius: 50%;</p>
+<p class="p1">pointer-events: none;</p>
+<p class="p1">z-index: 0;</p>
+<p class="p1">}</p>
+<p class="p1">.glow-orb.one {</p>
+<p class="p1">top: -300px; right: -200px;</p>
+<p class="p1">width: 700px; height: 700px;</p>
+<p class="p1">background: radial-gradient(circle, rgba(0,212,255,0.05) 0%, transparent 65%);</p>
+<p class="p1">animation: pulse 9s ease-in-out infinite;</p>
+<p class="p1">}</p>
+<p class="p1">.glow-orb.two {</p>
+<p class="p1">bottom: -200px; left: -200px;</p>
+<p class="p1">width: 500px; height: 500px;</p>
+<p class="p1">background: radial-gradient(circle, rgba(0,255,136,0.04) 0%, transparent 65%);</p>
+<p class="p1">animation: pulse 7s ease-in-out infinite 3s;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.wrap { max-width: 1380px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── HEADER ── */</p>
+<p class="p1">header {</p>
+<p class="p1">position: sticky; top: 0; z-index: 100;</p>
+<p class="p1">backdrop-filter: blur(24px);</p>
+<p class="p1">background: rgba(5,8,16,0.92);</p>
+<p class="p1">border-bottom: 1px solid var(–border);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.hdr {</p>
+<p class="p1">display: flex;</p>
+<p class="p1">align-items: center;</p>
+<p class="p1">justify-content: space-between;</p>
+<p class="p1">padding: 18px 0;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.brand { display: flex; align-items: center; gap: 13px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.brand-icon {</p>
+<p class="p1">width: 44px; height: 44px;</p>
+<p class="p1">background: linear-gradient(135deg, #00d4ff22, #00d4ff44);</p>
+<p class="p1">border: 1px solid rgba(0,212,255,0.4);</p>
+<p class="p1">border-radius: 12px;</p>
+<p class="p1">display: flex; align-items: center; justify-content: center;</p>
+<p class="p1">font-size: 1.3rem;</p>
+<p class="p1">box-shadow: 0 0 24px rgba(0,212,255,0.2), inset 0 1px 0 rgba(255,255,255,0.05);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.brand-text h1 {</p>
+<p class="p1">font-size: 1.15rem;</p>
+<p class="p1">font-weight: 800;</p>
+<p class="p1">letter-spacing: -0.01em;</p>
+<p class="p1">background: linear-gradient(90deg, #fff 0%, var(–accent) 100%);</p>
+<p class="p1">-webkit-background-clip: text;</p>
+<p class="p1">-webkit-text-fill-color: transparent;</p>
+<p class="p1">background-clip: text;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.brand-text p {</p>
+<p class="p1">font-size: 0.68rem;</p>
+<p class="p1">color: var(–muted);</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">letter-spacing: 0.06em;</p>
+<p class="p1">margin-top: 1px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.hdr-right { display: flex; align-items: center; gap: 16px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.live-pill {</p>
+<p class="p1">display: flex; align-items: center; gap: 7px;</p>
+<p class="p1">padding: 5px 13px;</p>
+<p class="p1">border-radius: 20px;</p>
+<p class="p1">border: 1px solid rgba(0,230,118,0.25);</p>
+<p class="p1">background: rgba(0,230,118,0.06);</p>
+<p class="p1">font-size: 0.72rem;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">color: var(–buy);</p>
+<p class="p1">letter-spacing: 0.05em;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.live-dot {</p>
+<p class="p1">width: 6px; height: 6px;</p>
+<p class="p1">border-radius: 50%;</p>
+<p class="p1">background: var(–buy);</p>
+<p class="p1">animation: blink 2s infinite;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">#clock {</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">font-size: 0.78rem;</p>
+<p class="p1">color: var(–muted);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── MAIN ── */</p>
+<p class="p1">main { padding: 36px 0 64px; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── STATS ROW ── */</p>
+<p class="p1">.stats-row {</p>
+<p class="p1">display: grid;</p>
+<p class="p1">grid-template-columns: repeat(4, 1fr);</p>
+<p class="p1">gap: 14px;</p>
+<p class="p1">margin-bottom: 36px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.stat {</p>
+<p class="p1">background: var(–surface);</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">border-radius: 14px;</p>
+<p class="p1">padding: 20px 22px;</p>
+<p class="p1">animation: fadeUp .5s ease both;</p>
+<p class="p1">position: relative;</p>
+<p class="p1">overflow: hidden;</p>
+<p class="p1">transition: border-color .2s, transform .2s;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.stat:hover { border-color: rgba(0,212,255,.25); transform: translateY(-2px); }</p>
+<p class="p1">.stat:nth-child(1){animation-delay:.08s}</p>
+<p class="p1">.stat:nth-child(2){animation-delay:.16s}</p>
+<p class="p1">.stat:nth-child(3){animation-delay:.24s}</p>
+<p class="p1">.stat:nth-child(4){animation-delay:.32s}</p>
+<p class="p2"><br></p>
+<p class="p1">.stat::after {</p>
+<p class="p1">content:’’;</p>
+<p class="p1">position:absolute;</p>
+<p class="p1">top:0;left:0;right:0;</p>
+<p class="p1">height:1px;</p>
+<p class="p1">background:linear-gradient(90deg,transparent,var(–accent),transparent);</p>
+<p class="p1">opacity:.4;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.stat-lbl {</p>
+<p class="p1">font-size: .68rem;</p>
+<p class="p1">color: var(–muted);</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">letter-spacing: .07em;</p>
+<p class="p1">text-transform: uppercase;</p>
+<p class="p1">margin-bottom: 10px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.stat-val {</p>
+<p class="p1">font-size: 2rem;</p>
+<p class="p1">font-weight: 800;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">line-height: 1;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.stat-val.c-accent { color: var(–accent); }</p>
+<p class="p1">.stat-val.c-buy { color: var(–buy); }</p>
+<p class="p1">.stat-val.c-wait { color: var(–wait); }</p>
+<p class="p1">.stat-val.c-sell { color: var(–sell); }</p>
+<p class="p2"><br></p>
+<p class="p1">.stat-sub { font-size: .7rem; color: var(–muted); margin-top: 6px; font-family: var(–mono); }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── SECTION HEADER ── */</p>
+<p class="p1">.sec-hdr {</p>
+<p class="p1">display: flex; align-items: center; justify-content: space-between;</p>
+<p class="p1">margin-bottom: 18px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.sec-title {</p>
+<p class="p1">font-size: 1rem;</p>
+<p class="p1">font-weight: 700;</p>
+<p class="p1">letter-spacing: -.01em;</p>
+<p class="p1">display: flex; align-items: center; gap: 10px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.sec-title::before {</p>
+<p class="p1">content:’’;</p>
+<p class="p1">width: 3px; height: 16px;</p>
+<p class="p1">background: var(–accent);</p>
+<p class="p1">border-radius: 2px;</p>
+<p class="p1">display:inline-block;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.btn-refresh {</p>
+<p class="p1">padding: 7px 16px;</p>
+<p class="p1">background: transparent;</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">border-radius: 8px;</p>
+<p class="p1">color: var(–accent);</p>
+<p class="p1">font-family: var(–font);</p>
+<p class="p1">font-size: .78rem;</p>
+<p class="p1">font-weight: 600;</p>
+<p class="p1">cursor: pointer;</p>
+<p class="p1">transition: all .2s;</p>
+<p class="p1">display: flex; align-items: center; gap: 6px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.btn-refresh:hover {</p>
+<p class="p1">background: rgba(0,212,255,.06);</p>
+<p class="p1">border-color: var(–accent);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.btn-refresh.spinning .icon { display:inline-block; animation: spin .7s linear infinite; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── COINS GRID ── */</p>
+<p class="p1">.coins-grid {</p>
+<p class="p1">display: grid;</p>
+<p class="p1">grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));</p>
+<p class="p1">gap: 14px;</p>
+<p class="p1">margin-bottom: 36px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.coin-card {</p>
+<p class="p1">background: var(–surface);</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">border-radius: 16px;</p>
+<p class="p1">padding: 22px;</p>
+<p class="p1">cursor: pointer;</p>
+<p class="p1">animation: fadeUp .5s ease both;</p>
+<p class="p1">transition: all .3s;</p>
+<p class="p1">position: relative;</p>
+<p class="p1">overflow: hidden;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.coin-card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,.5); }</p>
+<p class="p1">.coin-card.buy-c<span class="Apple-converted-space">  </span>{ border-color: rgba(0,230,118,.2); }</p>
+<p class="p1">.coin-card.buy-c:hover<span class="Apple-converted-space">  </span>{ border-color: rgba(0,230,118,.45); box-shadow: 0 14px 40px rgba(0,230,118,.08); }</p>
+<p class="p1">.coin-card.wait-c { border-color: rgba(255,179,0,.2); }</p>
+<p class="p1">.coin-card.wait-c:hover { border-color: rgba(255,179,0,.45); box-shadow: 0 14px 40px rgba(255,179,0,.08); }</p>
+<p class="p1">.coin-card.sell-c { border-color: rgba(255,59,92,.2); }</p>
+<p class="p1">.coin-card.sell-c:hover { border-color: rgba(255,59,92,.45); box-shadow: 0 14px 40px rgba(255,59,92,.08); }</p>
+<p class="p2"><br></p>
+<p class="p1">.card-top {</p>
+<p class="p1">display: flex; align-items: center; justify-content: space-between;</p>
+<p class="p1">margin-bottom: 18px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.coin-meta { display: flex; align-items: center; gap: 11px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.c-icon {</p>
+<p class="p1">width: 40px; height: 40px;</p>
+<p class="p1">border-radius: 50%;</p>
+<p class="p1">display: flex; align-items: center; justify-content: center;</p>
+<p class="p1">font-weight: 700; font-size: 1rem;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">flex-shrink: 0;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.c-icon.btc { background:rgba(247,147,26,.12); color:#f7931a; border:1px solid rgba(247,147,26,.3); }</p>
+<p class="p1">.c-icon.eth { background:rgba(98,126,234,.12); color:#627eea; border:1px solid rgba(98,126,234,.3); }</p>
+<p class="p1">.c-icon.sol { background:rgba(153,69,255,.12); color:#9945ff; border:1px solid rgba(153,69,255,.3); }</p>
+<p class="p1">.c-icon.bnb { background:rgba(240,185,11,.12); color:#f0b90b; border:1px solid rgba(240,185,11,.3); }</p>
+<p class="p1">.c-icon.ada { background:rgba(0,51,173,.15); color:#4d7fff; border:1px solid rgba(77,127,255,.3); }</p>
+<p class="p2"><br></p>
+<p class="p1">.c-name h3 { font-size: .92rem; font-weight: 700; }</p>
+<p class="p1">.c-name p<span class="Apple-converted-space">  </span>{ font-size: .68rem; color: var(–muted); font-family: var(–mono); margin-top:1px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.badge {</p>
+<p class="p1">padding: 4px 11px;</p>
+<p class="p1">border-radius: 20px;</p>
+<p class="p1">font-size: .68rem;</p>
+<p class="p1">font-weight: 600;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">letter-spacing: .04em;</p>
+<p class="p1">}</p>
+<p class="p1">.badge.buy<span class="Apple-converted-space">  </span>{ background:rgba(0,230,118,.1); color:var(–buy); border:1px solid rgba(0,230,118,.25); }</p>
+<p class="p1">.badge.sell { background:rgba(255,59,92,.1); color:var(–sell); border:1px solid rgba(255,59,92,.25); }</p>
+<p class="p1">.badge.wait { background:rgba(255,179,0,.1); color:var(–wait); border:1px solid rgba(255,179,0,.25); }</p>
+<p class="p2"><br></p>
+<p class="p1">.price {</p>
+<p class="p1">font-size: 1.55rem;</p>
+<p class="p1">font-weight: 800;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">letter-spacing: -.02em;</p>
+<p class="p1">margin-bottom: 4px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.chg {</p>
+<p class="p1">font-size: .78rem;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">margin-bottom: 14px;</p>
+<p class="p1">}</p>
+<p class="p1">.chg.pos { color: var(–buy); }</p>
+<p class="p1">.chg.neg { color: var(–sell); }</p>
+<p class="p2"><br></p>
+<p class="p1">/* Sparkline */</p>
+<p class="p1">.sparkline {</p>
+<p class="p1">display: flex;</p>
+<p class="p1">align-items: flex-end;</p>
+<p class="p1">gap: 2px;</p>
+<p class="p1">height: 34px;</p>
+<p class="p1">margin-bottom: 14px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.sp-bar {</p>
+<p class="p1">flex: 1;</p>
+<p class="p1">border-radius: 2px 2px 0 0;</p>
+<p class="p1">opacity: .65;</p>
+<p class="p1">transition: opacity .2s, height .4s ease;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.sp-bar.u { background: var(–buy); }</p>
+<p class="p1">.sp-bar.d { background: var(–sell); }</p>
+<p class="p1">.coin-card:hover .sp-bar { opacity: 1; }</p>
+<p class="p2"><br></p>
+<p class="p1">.inds {</p>
+<p class="p1">display: grid;</p>
+<p class="p1">grid-template-columns: 1fr 1fr;</p>
+<p class="p1">gap: 7px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.ind {</p>
+<p class="p1">background: var(–surface2);</p>
+<p class="p1">border-radius: 8px;</p>
+<p class="p1">padding: 8px 10px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.ind-lbl { font-size: .62rem; color: var(–muted); font-family: var(–mono); margin-bottom: 2px; letter-spacing:.04em; }</p>
+<p class="p1">.ind-val { font-size: .82rem; font-weight: 600; font-family: var(–mono); }</p>
+<p class="p2"><br></p>
+<p class="p1">.conf-track {</p>
+<p class="p1">margin-top: 14px;</p>
+<p class="p1">height: 3px;</p>
+<p class="p1">background: var(–surface2);</p>
+<p class="p1">border-radius: 2px;</p>
+<p class="p1">overflow: hidden;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.conf-fill {</p>
+<p class="p1">height: 100%;</p>
+<p class="p1">border-radius: 2px;</p>
+<p class="p1">transition: width 1.2s cubic-bezier(.4,0,.2,1);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.conf-fill.buy<span class="Apple-converted-space">  </span>{ background: linear-gradient(90deg, var(–buy), #00ffaa); }</p>
+<p class="p1">.conf-fill.wait { background: linear-gradient(90deg, var(–wait), #ffcc00); }</p>
+<p class="p1">.conf-fill.sell { background: linear-gradient(90deg, var(–sell), #ff6b80); }</p>
+<p class="p2"><br></p>
+<p class="p1">.conf-lbl {</p>
+<p class="p1">display: flex; justify-content: space-between;</p>
+<p class="p1">margin-top: 5px;</p>
+<p class="p1">font-size: .64rem;</p>
+<p class="p1">color: var(–muted);</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── REPORT ── */</p>
+<p class="p1">.report-box {</p>
+<p class="p1">background: var(–surface);</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">border-radius: 16px;</p>
+<p class="p1">padding: 28px;</p>
+<p class="p1">margin-bottom: 22px;</p>
+<p class="p1">animation: fadeUp .5s ease .4s both;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-hdr {</p>
+<p class="p1">display: flex; align-items: center; justify-content: space-between;</p>
+<p class="p1">padding-bottom: 18px;</p>
+<p class="p1">border-bottom: 1px solid var(–border);</p>
+<p class="p1">margin-bottom: 22px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-title { font-size: .95rem; font-weight: 700; display:flex; align-items:center; gap:9px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-date {</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">font-size: .72rem;</p>
+<p class="p1">color: var(–muted);</p>
+<p class="p1">background: var(–surface2);</p>
+<p class="p1">padding: 5px 12px;</p>
+<p class="p1">border-radius: 6px;</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-grid {</p>
+<p class="p1">display: grid;</p>
+<p class="p1">grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));</p>
+<p class="p1">gap: 14px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-coin {</p>
+<p class="p1">background: var(–surface2);</p>
+<p class="p1">border-radius: 12px;</p>
+<p class="p1">padding: 16px 18px;</p>
+<p class="p1">border: 1px solid transparent;</p>
+<p class="p1">transition: border-color .2s;</p>
+<p class="p1">}</p>
+<p class="p1">.rpt-coin:hover { border-color: var(–border); }</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-coin-top {</p>
+<p class="p1">display: flex; justify-content: space-between; align-items: center;</p>
+<p class="p1">margin-bottom: 12px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-coin-name {</p>
+<p class="p1">font-weight: 700;</p>
+<p class="p1">font-size: .88rem;</p>
+<p class="p1">display: flex; align-items: center; gap: 7px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-row {</p>
+<p class="p1">display: flex; gap: 6px;</p>
+<p class="p1">font-size: .76rem;</p>
+<p class="p1">color: var(–muted);</p>
+<p class="p1">margin-bottom: 5px;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.rpt-row span:last-child { color: var(–text); }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── BOTTOM TWO COLS ── */</p>
+<p class="p1">.bottom-grid {</p>
+<p class="p1">display: grid;</p>
+<p class="p1">grid-template-columns: 1fr 1fr;</p>
+<p class="p1">gap: 20px;</p>
+<p class="p1">margin-bottom: 22px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.box {</p>
+<p class="p1">background: var(–surface);</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">border-radius: 16px;</p>
+<p class="p1">padding: 24px;</p>
+<p class="p1">animation: fadeUp .5s ease .5s both;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.box h3 {</p>
+<p class="p1">font-size: .9rem;</p>
+<p class="p1">font-weight: 700;</p>
+<p class="p1">margin-bottom: 18px;</p>
+<p class="p1">display: flex; align-items: center; gap: 8px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Timeline */</p>
+<p class="p1">.timeline { display: flex; flex-direction: column; gap: 14px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.tl-item { display: flex; gap: 12px; align-items: flex-start; }</p>
+<p class="p2"><br></p>
+<p class="p1">.tl-dot {</p>
+<p class="p1">width: 10px; height: 10px;</p>
+<p class="p1">border-radius: 50%;</p>
+<p class="p1">margin-top: 4px;</p>
+<p class="p1">flex-shrink: 0;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.tl-dot.done<span class="Apple-converted-space">    </span>{ background: var(–buy); }</p>
+<p class="p1">.tl-dot.active<span class="Apple-converted-space">  </span>{ background: var(–accent); box-shadow: 0 0 8px var(–accent); animation: blink 1.5s infinite; }</p>
+<p class="p1">.tl-dot.pending { background: var(–border); }</p>
+<p class="p2"><br></p>
+<p class="p1">.tl-time<span class="Apple-converted-space">  </span>{ font-family: var(–mono); font-size: .68rem; color: var(–muted); }</p>
+<p class="p1">.tl-label { font-size: .82rem; margin-top: 2px; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* Setup steps */</p>
+<p class="p1">.steps { display: flex; flex-direction: column; gap: 9px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.step {</p>
+<p class="p1">display: flex; align-items: flex-start; gap: 11px;</p>
+<p class="p1">background: var(–surface2);</p>
+<p class="p1">border-radius: 10px;</p>
+<p class="p1">padding: 10px 14px;</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">transition: border-color .2s;</p>
+<p class="p1">}</p>
+<p class="p1">.step:hover { border-color: rgba(0,212,255,.2); }</p>
+<p class="p2"><br></p>
+<p class="p1">.step-num {</p>
+<p class="p1">width: 22px; height: 22px;</p>
+<p class="p1">border-radius: 50%;</p>
+<p class="p1">background: rgba(0,212,255,.08);</p>
+<p class="p1">border: 1px solid rgba(0,212,255,.25);</p>
+<p class="p1">display: flex; align-items: center; justify-content: center;</p>
+<p class="p1">font-size: .66rem; color: var(–accent);</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">flex-shrink: 0;</p>
+<p class="p1">margin-top: 1px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.step-txt { font-size: .8rem; line-height: 1.45; }</p>
+<p class="p1">.step-txt code { color: var(–accent); font-family: var(–mono); font-size: .75rem; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* Notification cards */</p>
+<p class="p1">.notif-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.notif {</p>
+<p class="p1">background: var(–surface2);</p>
+<p class="p1">border: 1px solid var(–border);</p>
+<p class="p1">border-radius: 12px;</p>
+<p class="p1">padding: 14px 16px;</p>
+<p class="p1">display: flex;</p>
+<p class="p1">align-items: center;</p>
+<p class="p1">gap: 13px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.n-icon {</p>
+<p class="p1">width: 38px; height: 38px;</p>
+<p class="p1">border-radius: 9px;</p>
+<p class="p1">display: flex; align-items: center; justify-content: center;</p>
+<p class="p1">font-size: 1.1rem;</p>
+<p class="p1">flex-shrink: 0;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.n-icon.tg { background: rgba(0,136,204,.12); }</p>
+<p class="p1">.n-icon.gm { background: rgba(234,67,53,.12); }</p>
+<p class="p2"><br></p>
+<p class="p1">.n-info { flex: 1; }</p>
+<p class="p1">.n-info h4 { font-size: .84rem; font-weight: 700; }</p>
+<p class="p1">.n-info p<span class="Apple-converted-space">  </span>{ font-size: .7rem; color: var(–muted); margin-top: 2px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.toggle-pill {</p>
+<p class="p1">width: 36px; height: 19px;</p>
+<p class="p1">border-radius: 10px;</p>
+<p class="p1">background: var(–buy);</p>
+<p class="p1">position: relative;</p>
+<p class="p1">cursor: pointer;</p>
+<p class="p1">flex-shrink: 0;</p>
+<p class="p1">transition: background .2s;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.toggle-pill::after {</p>
+<p class="p1">content: ‘’;</p>
+<p class="p1">position: absolute;</p>
+<p class="p1">right: 2px; top: 2px;</p>
+<p class="p1">width: 15px; height: 15px;</p>
+<p class="p1">background: white;</p>
+<p class="p1">border-radius: 50%;</p>
+<p class="p1">transition: right .2s;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.toggle-pill.off { background: var(–border); }</p>
+<p class="p1">.toggle-pill.off::after { right: calc(100% - 17px); }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── DISCLAIMER ── */</p>
+<p class="p1">.disclaimer {</p>
+<p class="p1">text-align: center;</p>
+<p class="p1">padding: 22px;</p>
+<p class="p1">color: var(–muted);</p>
+<p class="p1">font-size: .7rem;</p>
+<p class="p1">font-family: var(–mono);</p>
+<p class="p1">border-top: 1px solid var(–border);</p>
+<p class="p1">letter-spacing: .04em;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── RESPONSIVE ── */</p>
+<p class="p1">@media (max-width: 900px) {</p>
+<p class="p1">.stats-row { grid-template-columns: repeat(2, 1fr); }</p>
+<p class="p1">.bottom-grid { grid-template-columns: 1fr; }</p>
+<p class="p1">}</p>
+<p class="p1">@media (max-width: 600px) {</p>
+<p class="p1">.coins-grid { grid-template-columns: 1fr; }</p>
+<p class="p1">#clock { display: none; }</p>
+<p class="p1">.stats-row { grid-template-columns: 1fr 1fr; }</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="scanline"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="glow-orb one"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;div class="glow-orb two"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- HEADER --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="hdr"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="brand"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="brand-icon"&gt;₿&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="brand-text"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h1&gt;Crypto AI Trading Agent&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p&gt;GEMINI-2.5-FLASH · LIVE ANALYSIS · v2.0&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="hdr-right"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="live-pill"&gt;&lt;div class="live-dot"&gt;&lt;/div&gt;LIVE&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="clock"&gt;--:--:--&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- MAIN --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="wrap"&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- Stats --&gt;</p>
+<p class="p1">&lt;div class="stats-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="stat"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-lbl"&gt;Coins Analyzed&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-val c-accent"&gt;5&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-sub"&gt;BTC · ETH · SOL · BNB · ADA&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="stat"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-lbl"&gt;BUY Signals&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-val c-buy"&gt;3&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-sub"&gt;BTC · ETH · BNB&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="stat"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-lbl"&gt;WAIT Signals&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-val c-wait"&gt;2&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-sub"&gt;SOL · ADA&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="stat"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-lbl"&gt;Last Report&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-val c-accent" style="font-size:1.3rem" id="lastUpdate"&gt;03/03 12:29&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-sub"&gt;Daily run: 08:00 AM&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- Coins --&gt;</p>
+<p class="p1">&lt;div class="sec-hdr"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sec-title"&gt;Market Analysis&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn-refresh" onclick="doRefresh(this)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="icon"&gt;↻&lt;/span&gt; Refresh</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="coins-grid"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- BTC --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="coin-card buy-c" style="animation-delay:.08s"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="coin-meta"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-icon btc"&gt;₿&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-name"&gt;&lt;h3&gt;Bitcoin&lt;/h3&gt;&lt;p&gt;BTC-USD&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="badge buy"&gt;BUY&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price"&gt;$67,588&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="chg neg"&gt;▼ −1.73% today&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sparkline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:55%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:38%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:72%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:88%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:60%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:92%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:75%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:96%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:62%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:44%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="inds"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;RSI 14&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;47.7&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;MACD&lt;/div&gt;&lt;div class="ind-val" style="color:var(--sell)"&gt;−2318&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Confidence&lt;/div&gt;&lt;div class="ind-val" style="color:var(--buy)"&gt;70%&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Risk&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;MEDIUM&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-track"&gt;&lt;div class="conf-fill buy" style="width:70%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-lbl"&gt;&lt;span&gt;Confidence Level&lt;/span&gt;&lt;span&gt;70%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ETH --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="coin-card buy-c" style="animation-delay:.16s"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="coin-meta"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-icon eth"&gt;Ξ&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-name"&gt;&lt;h3&gt;Ethereum&lt;/h3&gt;&lt;p&gt;ETH-USD&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="badge buy"&gt;BUY&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price"&gt;$1,976&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="chg neg"&gt;▼ −2.50% today&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sparkline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:80%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:50%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:65%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:42%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:78%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:52%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:86%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:58%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:70%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:40%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="inds"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;RSI 14&lt;/div&gt;&lt;div class="ind-val" style="color:var(--buy)"&gt;42.3&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;MACD&lt;/div&gt;&lt;div class="ind-val" style="color:var(--sell)"&gt;−85.2&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Confidence&lt;/div&gt;&lt;div class="ind-val" style="color:var(--buy)"&gt;70%&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Risk&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;MEDIUM&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-track"&gt;&lt;div class="conf-fill buy" style="width:70%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-lbl"&gt;&lt;span&gt;Confidence Level&lt;/span&gt;&lt;span&gt;70%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- SOL --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="coin-card wait-c" style="animation-delay:.24s"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="coin-meta"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-icon sol"&gt;◎&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-name"&gt;&lt;h3&gt;Solana&lt;/h3&gt;&lt;p&gt;SOL-USD&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="badge wait"&gt;WAIT&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price"&gt;$84.92&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="chg neg"&gt;▼ −1.98% today&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sparkline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:90%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:74%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:54%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:82%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:60%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:44%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:68%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:50%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:64%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:54%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="inds"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;RSI 14&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;51.2&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;MACD&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;−1.8&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Confidence&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;60%&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Risk&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;MEDIUM&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-track"&gt;&lt;div class="conf-fill wait" style="width:60%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-lbl"&gt;&lt;span&gt;Confidence Level&lt;/span&gt;&lt;span&gt;60%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- BNB --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="coin-card buy-c" style="animation-delay:.32s"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="coin-meta"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-icon bnb"&gt;B&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-name"&gt;&lt;h3&gt;BNB&lt;/h3&gt;&lt;p&gt;BNB-USD&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="badge buy"&gt;BUY&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price"&gt;$628.68&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="chg neg"&gt;▼ −1.34% today&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sparkline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:60%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:82%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:48%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:96%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:64%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:88%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:70%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:76%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:54%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:44%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="inds"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;RSI 14&lt;/div&gt;&lt;div class="ind-val" style="color:var(--buy)"&gt;38.5&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;MACD&lt;/div&gt;&lt;div class="ind-val" style="color:var(--sell)"&gt;−12.4&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Confidence&lt;/div&gt;&lt;div class="ind-val" style="color:var(--buy)"&gt;70%&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Risk&lt;/div&gt;&lt;div class="ind-val" style="color:var(--buy)"&gt;LOW&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-track"&gt;&lt;div class="conf-fill buy" style="width:70%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-lbl"&gt;&lt;span&gt;Confidence Level&lt;/span&gt;&lt;span&gt;70%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ADA --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="coin-card wait-c" style="animation-delay:.40s"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="coin-meta"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-icon ada"&gt;A&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="c-name"&gt;&lt;h3&gt;Cardano&lt;/h3&gt;&lt;p&gt;ADA-USD&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="badge wait"&gt;WAIT&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="price"&gt;$0.271&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="chg neg"&gt;▼ −4.13% today&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sparkline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:70%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:55%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:65%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:48%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar u" style="height:72%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:50%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:40%"&gt;&lt;/div&gt;&lt;div class="sp-bar u" style="height:60%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sp-bar d" style="height:44%"&gt;&lt;/div&gt;&lt;div class="sp-bar d" style="height:36%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="inds"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;RSI 14&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;49.0&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;MACD&lt;/div&gt;&lt;div class="ind-val" style="color:var(--sell)"&gt;−0.004&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Confidence&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;60%&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ind"&gt;&lt;div class="ind-lbl"&gt;Risk&lt;/div&gt;&lt;div class="ind-val" style="color:var(--wait)"&gt;MEDIUM&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-track"&gt;&lt;div class="conf-fill wait" style="width:60%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="conf-lbl"&gt;&lt;span&gt;Confidence Level&lt;/span&gt;&lt;span&gt;60%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- Full Report --&gt;</p>
+<p class="p1">&lt;div class="report-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="rpt-hdr"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="rpt-title"&gt;📋 Daily AI Report — Gemini 2.5 Flash&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="rpt-date" id="rptDate"&gt;2026-03-03 · 12:29 UTC&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="rpt-grid"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="rpt-coin"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-coin-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rpt-coin-name"&gt;₿ Bitcoin&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge buy"&gt;BUY&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Price:&lt;/span&gt;&lt;span&gt;$67,588.70&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Change:&lt;/span&gt;&lt;span style="color:var(--sell)"&gt;−1.73%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Confidence:&lt;/span&gt;&lt;span style="color:var(--buy)"&gt;70%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Risk:&lt;/span&gt;&lt;span style="color:var(--wait)"&gt;MEDIUM&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="rpt-coin"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-coin-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rpt-coin-name"&gt;Ξ Ethereum&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge buy"&gt;BUY&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Price:&lt;/span&gt;&lt;span&gt;$1,976.53&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Change:&lt;/span&gt;&lt;span style="color:var(--sell)"&gt;−2.50%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Confidence:&lt;/span&gt;&lt;span style="color:var(--buy)"&gt;70%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Risk:&lt;/span&gt;&lt;span style="color:var(--wait)"&gt;MEDIUM&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="rpt-coin"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-coin-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rpt-coin-name"&gt;◎ Solana&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge wait"&gt;WAIT&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Price:&lt;/span&gt;&lt;span&gt;$84.92&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Change:&lt;/span&gt;&lt;span style="color:var(--sell)"&gt;−1.98%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Confidence:&lt;/span&gt;&lt;span style="color:var(--wait)"&gt;60%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Risk:&lt;/span&gt;&lt;span style="color:var(--wait)"&gt;MEDIUM&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="rpt-coin"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-coin-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rpt-coin-name"&gt;B BNB&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge buy"&gt;BUY&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Price:&lt;/span&gt;&lt;span&gt;$628.68&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Change:&lt;/span&gt;&lt;span style="color:var(--sell)"&gt;−1.34%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Confidence:&lt;/span&gt;&lt;span style="color:var(--buy)"&gt;70%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Risk:&lt;/span&gt;&lt;span style="color:var(--buy)"&gt;LOW&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="rpt-coin"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-coin-top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rpt-coin-name"&gt;A Cardano&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge wait"&gt;WAIT&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Price:&lt;/span&gt;&lt;span&gt;$0.271&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Change:&lt;/span&gt;&lt;span style="color:var(--sell)"&gt;−4.13%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Confidence:&lt;/span&gt;&lt;span style="color:var(--wait)"&gt;60%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rpt-row"&gt;&lt;span&gt;Risk:&lt;/span&gt;&lt;span style="color:var(--wait)"&gt;MEDIUM&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- Bottom Grid --&gt;</p>
+<p class="p1">&lt;div class="bottom-grid"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Schedule --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;⏱ Daily Schedule&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="timeline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tl-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="tl-dot done"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-time"&gt;08:00 AM&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-label"&gt;Fetch market data (yfinance)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tl-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="tl-dot done"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-time"&gt;08:01 AM&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-label"&gt;Calculate RSI, MACD, Bollinger Bands&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tl-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="tl-dot done"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-time"&gt;08:02 AM&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-label"&gt;Fetch crypto news &amp;amp; sentiment&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tl-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="tl-dot active"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-time"&gt;08:03 AM&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-label"&gt;Gemini AI analysis for all 5 coins&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tl-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="tl-dot pending"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-time"&gt;08:05 AM&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tl-label"&gt;Send report via Telegram &amp;amp; save to Drive&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Deployment --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;🚀 Deployment Checklist&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="steps"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-num"&gt;1&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-txt"&gt;Add &lt;code&gt;GEMINI_API_KEY&lt;/code&gt; to Colab Secrets panel&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-num"&gt;2&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-txt"&gt;Add &lt;code&gt;TELEGRAM_TOKEN&lt;/code&gt; + &lt;code&gt;TELEGRAM_CHAT_ID&lt;/code&gt; to Secrets&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-num"&gt;3&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-txt"&gt;Optionally add &lt;code&gt;CRYPTOPANIC_TOKEN&lt;/code&gt; for live news&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-num"&gt;4&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-txt"&gt;Run all cells top-to-bottom (Shift+Enter)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-num"&gt;5&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-txt"&gt;Cell 14 runs the daily scheduler — keep tab open&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- Notifications --&gt;</p>
+<p class="p1">&lt;div class="box" style="margin-bottom:22px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h3&gt;🔔 Notification Channels&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="notif-cards"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="notif"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="n-icon tg"&gt;📱&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="n-info"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h4&gt;Telegram Bot&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Token configured · Chat ID: 158465****&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="toggle-pill" onclick="this.classList.toggle('off')"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="notif"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="n-icon gm"&gt;✉️&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="n-info"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h4&gt;Gmail&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Not configured · Add GMAIL_SENDER to Secrets&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="toggle-pill off" onclick="this.classList.toggle('off')"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="notif"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="n-icon" style="background:rgba(0,212,255,.1)"&gt;💾&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="n-info"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h4&gt;Google Drive&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Auto-save to Crypto_Reports/ folder&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="toggle-pill" onclick="this.classList.toggle('off')"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;&lt;!-- /wrap --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="disclaimer"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>⚠️ FOR EDUCATIONAL PURPOSES ONLY · THIS IS NOT FINANCIAL ADVICE · TRADING INVOLVES RISK · NEVER INVEST MORE THAN YOU CAN AFFORD TO LOSE</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Clock</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function tick() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const d = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('clock').textContent =</p>
+<p class="p1"><span class="Apple-converted-space">      </span>d.toTimeString().slice(0,8) + ' UTC';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tick();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>setInterval(tick, 1000);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Report date</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('rptDate').textContent =</p>
+<p class="p1"><span class="Apple-converted-space">    </span>new Date().toISOString().slice(0,10) + ' · ' +</p>
+<p class="p1"><span class="Apple-converted-space">    </span>new Date().toTimeString().slice(0,5) + ' UTC';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Refresh animation</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function doRefresh(btn) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>btn.classList.add('spinning');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>btn.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.classList.remove('spinning');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById('lastUpdate').textContent =</p>
+<p class="p1"><span class="Apple-converted-space">        </span>new Date().toLocaleDateString('en-GB',{month:'2-digit',day:'2-digit'}) +</p>
+<p class="p1"><span class="Apple-converted-space">        </span>' ' + new Date().toTimeString().slice(0,5);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}, 1800);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Animate confidence bars on load</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.addEventListener('load', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('.conf-fill').forEach(el =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const w = el.style.width;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>el.style.width = '0%';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setTimeout(() =&gt; { el.style.width = w; }, 300);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
